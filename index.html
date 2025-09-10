@@ -22,126 +22,102 @@
             overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* The canvas for the 3D animation will be the background */
         #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
         }
 
-        /* Ensure content is scrollable on top of the canvas */
-        .content-container {
-            position: relative;
-            z-index: 1;
+        .content-container, #articles-page {
+            position: relative; z-index: 1; transition: opacity 0.5s ease-out, transform 0.5s ease-out;
         }
 
-        /* Glassmorphism effect for content sections */
         .card {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* For Safari */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.2s ease-out, box-shadow 0.3s ease;
-            transform-style: preserve-3d; 
+            background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease-out, box-shadow 0.3s ease; transform-style: preserve-3d; 
         }
-        
-        .card:hover {
-            box-shadow: 0 0 25px rgba(0, 150, 255, 0.2);
-        }
+        .card:hover { box-shadow: 0 0 25px rgba(0, 150, 255, 0.2); }
 
-        /* Animation for sections fading in on scroll */
-        .scroll-animate {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .scroll-animate.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .scroll-animate { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .scroll-animate.visible { opacity: 1; transform: translateY(0); }
         
-        /* Animated Nav Link Underline */
-        nav a {
-            position: relative;
-            padding-bottom: 4px;
-        }
+        nav a { position: relative; padding-bottom: 4px; }
         nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #22d3ee; /* cyan-400 */
-            transform: scaleX(0);
-            transform-origin: bottom right;
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background-color: #22d3ee; transform: scaleX(0); transform-origin: bottom right;
             transition: transform 0.3s ease-out;
         }
-        nav a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+        nav a:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(22, 163, 74, 0.3), 0 0 10px rgba(56, 189, 248, 0.2); }
+            50% { box-shadow: 0 0 35px rgba(22, 163, 74, 0.5), 0 0 20px rgba(56, 189, 248, 0.4); }
+        }
+        .cta-button { animation: pulse 3s infinite; }
+        
+        .hero-title span { display: inline-block; opacity: 0; transform: translateY(20px) scale(0.9); animation: fadeInLetter 0.8s forwards; }
+        @keyframes fadeInLetter { to { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        header { animation: slideDown 0.8s ease-out 0.5s backwards; }
+        
+        .team-member img { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .team-member:hover img { transform: scale(1.05); box-shadow: 0 0 30px rgba(45, 212, 191, 0.4); }
+        .client-logo { filter: grayscale(100%) brightness(0.8); transition: all 0.3s ease; }
+        .client-logo:hover { filter: grayscale(0%) brightness(1); transform: scale(1.1); }
+        
+        #articles-page {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            overflow-y: auto; z-index: 100;
         }
 
-        /* Pulsating Button Animation */
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(22, 163, 74, 0.3), 0 0 10px rgba(56, 189, 248, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 35px rgba(22, 163, 74, 0.5), 0 0 20px rgba(56, 189, 248, 0.4);
-            }
+        .article-card {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d; transition: all 0.3s ease; cursor: pointer;
         }
-        .cta-button {
-            animation: pulse 3s infinite;
+        .article-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(45, 212, 191, 0.3);
         }
+        .article-card img { transition: transform 0.3s ease; }
+        .article-card:hover img { transform: scale(1.1); }
         
-        /* Animated Hero Text */
-        .hero-title span {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            animation: fadeInLetter 0.8s forwards;
-        }
-        @keyframes fadeInLetter {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+        #article-modal { transition: opacity 0.3s ease-in-out; }
+        #modal-content { transition: transform 0.3s ease-in-out; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
 
-    <!-- Canvas for Three.js animation -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- Main content container that scrolls over the canvas -->
     <div class="content-container">
         
-        <!-- Header -->
         <header class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-20 bg-black bg-opacity-30 backdrop-blur-sm">
-            <h1 class="text-2xl font-bold tracking-wider">The Paradigm Project</h1>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="transition-colors">About</a>
-                <a href="#services" class="transition-colors">Services</a>
-                <a href="#contact" class="transition-colors">Contact</a>
+            <a href="#home" class="logo-link">
+                <!-- <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="TPP_Logo.svg">
+                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M2 7L12 12M12 22V12M22 7L12 12M17 4.5L7 9.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg> -->
+                <img width="150" height="40" viewBox="0 0 24 24" src="TPP_Logo.svg" alt="Logo">
+            </a>
+            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-widest">
+                <a href="#about" class="transition-colors nav-link">About</a>
+                <a href="#goals" class="transition-colors nav-link">Goals</a>
+                <a href="#team" class="transition-colors nav-link">Team</a>
+                <a href="#articles" class="transition-colors nav-link">Articles</a>
+                <a href="#contact" class="transition-colors nav-link">Contact</a>
             </nav>
         </header>
 
-        <main>
+        <main id="main-content">
             <!-- Hero Section -->
-            <section class="h-screen flex flex-col justify-center items-center text-center px-4">
-                <h2 class="hero-title text-5xl md:text-7xl font-extrabold leading-tight tracking-wide">
-                    {/* Letters will be injected by JS */}
-                </h2>
+            <section id="home" class="h-screen flex flex-col justify-center items-center text-center px-4">
+                <h2 class="hero-title text-5xl md:text-7xl font-extrabold leading-tight tracking-wide"></h2>
                 <p class="mt-6 text-xl text-gray-300 max-w-3xl scroll-animate">
                     We are The Paradigm Project. We guide businesses through the complexities of ESG to unlock sustainable growth and lasting impact.
                 </p>
-                <a href="#services" class="cta-button mt-12 px-8 py-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 scroll-animate">
+                <a href="#goals" class="cta-button mt-12 px-8 py-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 scroll-animate">
                     Explore Our Solutions
                 </a>
             </section>
@@ -156,42 +132,70 @@
                 </div>
             </section>
 
-            <!-- Services Section -->
-            <section id="services" class="py-24 px-6">
+            <!-- Goals Section (formerly Services) -->
+            <section id="goals" class="py-24 px-6">
                 <div class="max-w-6xl mx-auto">
-                    <h3 class="text-4xl font-bold text-center mb-12 scroll-animate">Our Expertise</h3>
+                    <h3 class="text-4xl font-bold text-center mb-12 scroll-animate">Our Goals</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <!-- Service Card 1: Environment -->
                         <div class="card p-8 rounded-2xl scroll-animate">
-                            <h4 class="text-2xl font-semibold mb-3 text-green-400">Environmental Strategy</h4>
+                            <h4 class="text-2xl font-semibold mb-3 text-green-400">Environmental Stewardship</h4>
                             <p class="text-gray-300">
-                                Develop robust strategies for decarbonization, circular economy implementation, and biodiversity protection. We help you navigate climate risk and regulatory landscapes.
+                                Guide partners to develop robust strategies for decarbonization, circular economy implementation, and biodiversity protection.
                             </p>
                         </div>
-                        <!-- Service Card 2: Social -->
                         <div class="card p-8 rounded-2xl scroll-animate" style="transition-delay: 200ms;">
-                            <h4 class="text-2xl font-semibold mb-3 text-blue-400">Social Impact</h4>
+                            <h4 class="text-2xl font-semibold mb-3 text-blue-400">Positive Social Impact</h4>
                             <p class="text-gray-300">
-                                Enhance your social license to operate through supply chain transparency, diversity & inclusion initiatives, and impactful community engagement programs.
+                                Help enhance social license through supply chain transparency, diversity & inclusion initiatives, and impactful community programs.
                             </p>
                         </div>
-                        <!-- Service Card 3: Governance -->
                         <div class="card p-8 rounded-2xl scroll-animate" style="transition-delay: 400ms;">
-                            <h4 class="text-2xl font-semibold mb-3 text-purple-400">Governance Frameworks</h4>
+                            <h4 class="text-2xl font-semibold mb-3 text-purple-400">Ethical Governance</h4>
                             <p class="text-gray-300">
-                                Strengthen your organization with ethical governance structures, transparent reporting (GRI, SASB), and effective stakeholder communication.
+                                Strengthen organizations with ethical governance structures, transparent reporting (GRI, SASB), and effective stakeholder communication.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
+
+             <!-- Team Section -->
+            <section id="team" class="py-24 px-6 bg-black bg-opacity-20">
+                <div class="max-w-5xl mx-auto">
+                    <h3 class="text-4xl font-bold text-center mb-12 scroll-animate">Meet the Team</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center">
+                        <div class="team-member scroll-animate">
+                            <img src="https://media.licdn.com/dms/image/v2/D5603AQFck35WBokieg/profile-displayphoto-shrink_400_400/B56ZYwNnn.HEAg-/0/1744565599645?e=1760572800&v=beta&t=1Q4Kq2jFUZ9LLkFbaT9oCWZiP4as6WjWPwB0x1gT0xI" alt="Ashish Kohli" class="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-gray-700">
+                            <h4 class="text-2xl font-semibold">Ashish Kohli</h4>
+                            <p class="text-cyan-400 mb-2">Founding President</p>
+                            <p class="text-gray-400 max-w-sm mx-auto">With a Ph.D. in Environmental Science, Aris has dedicated his career to bridging the gap between ecological preservation and corporate growth.</p>
+                        </div>
+                        <div class="team-member scroll-animate" style="transition-delay: 200ms;">
+                            <img src="https://media.licdn.com/dms/image/v2/D4D03AQFs6Grd6zCrqw/profile-displayphoto-shrink_400_400/B4DZVsXObzHkAk-/0/1741279783640?e=1760572800&v=beta&t=BbEP_Rck3llHYCj0WGiauqFb2wNAlPEPxTQn4LlI-4g" alt="Dhwani" class="w-40 h-40 rounded-full mx-auto mb-4 border-4 border-gray-700">
+                            <h4 class="text-2xl font-semibold">Dhwani</h4>
+                            <p class="text-cyan-400 mb-2">Founding President</p>
+                            <p class="text-gray-400 max-w-sm mx-auto">A former human rights lawyer, Elara specializes in ethical supply chains, corporate governance, and stakeholder engagement.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Clients Section -->
+            <section id="clients" class="py-20">
+                <div class="max-w-5xl mx-auto text-center">
+                    <h3 class="text-3xl font-bold mb-10 scroll-animate">Trusted By Industry Leaders</h3>
+                    <div class="flex flex-wrap justify-center items-center gap-x-16 gap-y-8" >
+                        <img src="Paisalo_client.png" alt="Client Logo 1" class="client-logo h-12 scroll-animate">
+                        <img src="Exponent_client.jpeg" alt="Client Logo 2" class="client-logo h-12 scroll-animate" style="transition-delay: 200ms;">
+                    </div>
+                </div>
+            </section>
             
-            <!-- Contact/CTA Section -->
             <section id="contact" class="py-32 text-center px-6 scroll-animate">
                  <div class="max-w-3xl mx-auto">
                     <h3 class="text-4xl font-bold mb-4">Ready to Start a New Paradigm?</h3>
                     <p class="text-xl text-gray-300 mb-8">
-                        Let's collaborate to build a more resilient and responsible business. Reach out to our team to discuss how we can help you achieve your ESG goals.
+                        Let's collaborate to build a more resilient and responsible business.
                     </p>
                     <button class="cta-button px-10 py-4 bg-cyan-500 hover:bg-cyan-400 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/20">
                         Contact Us
@@ -200,106 +204,118 @@
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="text-center py-8 border-t border-gray-800">
-            <p>&copy; 2024 The Paradigm Project. All Rights Reserved.</p>
+            <p>&copy; 2025 The Paradigm Project. All Rights Reserved.</p>
         </footer>
     </div>
 
-    <!-- Three.js Library -->
+    <!-- Articles Page -->
+    <div id="articles-page" class="hidden opacity-0 -translate-y-full">
+        <div class="max-w-7xl mx-auto px-6 py-24">
+            <button id="back-to-main" class="mb-12 text-cyan-400 font-bold">&larr; Back to Home</button>
+            <h2 class="text-5xl font-extrabold text-center mb-16">Latest Insights & Articles</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Article Card 1 -->
+                <div class="article-card rounded-xl overflow-hidden group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1600" class="w-full h-56 object-cover" alt="Article Image 1">
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-cyan-400 mb-2">REPORT</p>
+                        <h3 class="text-xl font-bold mb-4">The Future of ESG: 2025 Trends Report</h3>
+                        <p class="text-gray-400 hidden">An in-depth look at the upcoming shifts in regulation, technology, and investor expectations that will shape the ESG landscape. This report covers key areas such as mandatory climate disclosures, the rise of nature-related financial disclosures (TNFD), and the growing importance of Scope 3 emissions tracking. We also explore how AI and machine learning are being leveraged to analyze complex ESG data sets, providing companies with unprecedented insights into their sustainability performance.</p>
+                    </div>
+                </div>
+                <!-- Article Card 2 -->
+                 <div class="article-card rounded-xl overflow-hidden group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1582522438873-a2a0a1a8c876?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1600" class="w-full h-56 object-cover" alt="Article Image 2">
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-cyan-400 mb-2">CASE STUDY</p>
+                        <h3 class="text-xl font-bold mb-4">Circular Economy in Action: A Client Success Story</h3>
+                        <p class="text-gray-400 hidden">How we partnered with Aether Industries to redesign their supply chain, reducing waste by 40% and unlocking new revenue streams. This case study details the five-step process we implemented, from initial material flow analysis to the development of a product-as-a-service model. We'll show you the data behind the success, including a 25% reduction in raw material costs and a significant increase in customer loyalty.</p>
+                    </div>
+                </div>
+                <!-- Article Card 3 -->
+                 <div class="article-card rounded-xl overflow-hidden group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1600" class="w-full h-56 object-cover" alt="Article Image 3">
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-cyan-400 mb-2">ANALYSIS</p>
+                        <h3 class="text-xl font-bold mb-4">The 'S' in ESG: Why Social Metrics Are Your Biggest Untapped Asset</h3>
+                        <p class="text-gray-400 hidden">Beyond philanthropy: A deep dive into how investing in social initiatives drives employee retention, brand loyalty, and long-term value. This analysis examines the correlation between high social scores and financial outperformance, citing recent studies from leading academic institutions. We provide a framework for identifying and measuring the social metrics that matter most to your specific industry and stakeholders.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div id="article-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-[110] flex justify-center items-center p-4 opacity-0">
+        <div id="modal-content" class="bg-gray-900 border border-gray-700 rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 relative transform scale-95">
+            <button id="modal-close-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-4xl leading-none">&times;</button>
+            <img id="modal-image" src="" alt="Article Image" class="w-full h-64 object-cover rounded-md mb-6">
+            <h3 id="modal-title" class="text-3xl font-bold mb-4 text-cyan-300"></h3>
+            <div id="modal-text" class="text-gray-300 prose prose-invert max-w-none"></div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
-    <!-- Main JavaScript for 3D Animation and Interactions -->
     <script type="module">
-        // Ensure Three.js is loaded
-        if (typeof THREE === 'undefined') {
-            console.error('Three.js has not been loaded.');
-        } else {
-            // Scene Setup
+        // --- 3D Animation ---
+        if (typeof THREE !== 'undefined') {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({
-                canvas: document.querySelector('#bg-canvas'),
-                alpha: true,
-                antialias: true
-            });
+            const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg-canvas'), alpha: true, antialias: true });
 
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
             camera.position.z = 5;
 
-            // --- 3D Objects ---
-
             const globeGroup = new THREE.Group();
             scene.add(globeGroup);
 
             const textureLoader = new THREE.TextureLoader();
-
-            // 1. Globe
-            const earthTexture = textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/2_no_clouds_4k.jpg');
-            const globeGeometry = new THREE.SphereGeometry(1.5, 64, 64);
-            const globeMaterial = new THREE.MeshStandardMaterial({
-                map: earthTexture,
-                metalness: 0.2,
-                roughness: 0.8
-            });
-            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            const globe = new THREE.Mesh(new THREE.SphereGeometry(1.5, 64, 64), new THREE.MeshStandardMaterial({ map: textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/2_no_clouds_4k.jpg'), metalness: 0.2, roughness: 0.8 }));
             globeGroup.add(globe);
 
-            // 2. Clouds layer
-            const cloudTexture = textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_4k.png');
-            const cloudGeometry = new THREE.SphereGeometry(1.52, 64, 64);
-            const cloudMaterial = new THREE.MeshStandardMaterial({
-                map: cloudTexture,
-                transparent: true,
-                opacity: 0.4
-            });
-            const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+            const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.52, 64, 64), new THREE.MeshStandardMaterial({ map: textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/fair_clouds_4k.png'), transparent: true, opacity: 0.4 }));
             globeGroup.add(clouds);
             
-            // 3. Surrounding Starfield
             const particlesCount = 8000;
             const posArray = new Float32Array(particlesCount * 3);
-            for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 60;
-            }
+            for (let i = 0; i < particlesCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 60; }
             const particlesGeometry = new THREE.BufferGeometry();
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const particlesMaterial = new THREE.PointsMaterial({ size: 0.01, color: 0xffffff, transparent: true, opacity: 0.7 });
-            const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            const particleMesh = new THREE.Points(particlesGeometry, new THREE.PointsMaterial({ size: 0.01, color: 0xffffff, transparent: true, opacity: 0.7 }));
             scene.add(particleMesh);
 
-            // Higher-quality Satellites
             const satellites = [];
             function createSatellite() {
                 const group = new THREE.Group();
                 const body = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.2, 16), new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9, roughness: 0.1 }));
                 body.rotation.z = Math.PI / 2;
                 const panel1 = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.1), new THREE.MeshStandardMaterial({ color: 0x003366, side: THREE.DoubleSide, metalness: 0.5, roughness: 0.5 }));
-                const panel2 = panel1.clone();
                 panel1.position.x = 0.2;
-                panel2.position.x = -0.2;
-                const dish = new THREE.Mesh(new THREE.SphereGeometry(0.05, 16, 8, 0, Math.PI * 2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide, metalness: 0.7 }));
-                dish.position.y = 0.1;
-                dish.rotation.x = -Math.PI/4;
-                group.add(body, panel1, panel2, dish);
+                const panel2 = panel1.clone(); panel2.position.x = -0.2;
+                group.add(body, panel1, panel2);
                 return group;
             }
             for (let i = 0; i < 5; i++) {
                 const satellite = createSatellite();
                 const orbitRadius = Math.random() * 2 + 2.5;
                 const speed = (Math.random() * 0.2 + 0.1) * (Math.random() > 0.5 ? 1 : -1);
-                satellite.position.copy(
-                    new THREE.Vector3( (Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5) ).normalize().multiplyScalar(orbitRadius)
-                );
-                const orbitAxis = new THREE.Vector3( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 ).normalize();
+                satellite.position.copy(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).normalize().multiplyScalar(orbitRadius));
+                const orbitAxis = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
                 satellites.push({ mesh: satellite, axis: orbitAxis, speed: speed });
                 scene.add(satellite);
             }
 
-            // Higher-quality Asteroids
             const asteroidCount = 150;
-            const asteroidGeometry = new THREE.DodecahedronGeometry(1, 0); // Chunky rock
+            const asteroidGeometry = new THREE.DodecahedronGeometry(1, 0);
             const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.8, metalness: 0.2 });
             const asteroidMesh = new THREE.InstancedMesh(asteroidGeometry, asteroidMaterial, asteroidCount);
             const dummy = new THREE.Object3D();
@@ -311,155 +327,193 @@
                 dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
                 dummy.updateMatrix();
                 asteroidMesh.setMatrixAt(i, dummy.matrix);
-                asteroidData.push({
-                    velocity: new THREE.Vector3((Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03),
-                    rotationSpeed: new THREE.Vector3(Math.random() * 0.01, Math.random() * 0.01, Math.random() * 0.01)
-                });
+                asteroidData.push({ velocity: new THREE.Vector3((Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03), rotationSpeed: new THREE.Vector3(Math.random() * 0.01, Math.random() * 0.01, Math.random() * 0.01) });
             }
             scene.add(asteroidMesh);
 
-            // --- Lighting ---
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); 
-            scene.add(ambientLight);
-            const pointLight = new THREE.PointLight(0x60a5fa, 1.5, 20);
-            pointLight.position.set(2, 3, 4);
-            scene.add(pointLight);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambientLight);
+            const pointLight = new THREE.PointLight(0x60a5fa, 1.5, 20); pointLight.position.set(2, 3, 4); scene.add(pointLight);
             
-            // --- Interactivity ---
             const mouse = new THREE.Vector2();
-            const raycaster = new THREE.Raycaster();
-
-            window.addEventListener('mousemove', (event) => {
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-            });
+            window.addEventListener('mousemove', (event) => { mouse.x = (event.clientX / window.innerWidth) * 2 - 1; mouse.y = - (event.clientY / window.innerHeight) * 2 + 1; });
             
-            // Globe click interaction
-            let isPulsing = false;
-            let pulseTime = 0;
-            window.addEventListener('click', () => {
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObject(globe);
-                if (intersects.length > 0 && !isPulsing) {
-                    isPulsing = true;
-                    pulseTime = 0;
-                }
-            });
-
             let scrollY = window.scrollY;
             window.addEventListener('scroll', () => { scrollY = window.scrollY; });
 
-            // --- Animation Loop ---
             const clock = new THREE.Clock();
             const animate = () => {
                 requestAnimationFrame(animate);
                 const elapsedTime = clock.getElapsedTime();
                 const deltaTime = clock.getDelta();
 
-                // Animate globe and clouds
                 globe.rotation.y = .05 * elapsedTime;
                 clouds.rotation.y = .06 * elapsedTime; 
-                
-                // Animate satellites
-                satellites.forEach(sat => {
-                    sat.mesh.position.applyAxisAngle(sat.axis, sat.speed * deltaTime);
-                    sat.mesh.lookAt(globe.position);
-                });
+                satellites.forEach(sat => { sat.mesh.position.applyAxisAngle(sat.axis, sat.speed * deltaTime); sat.mesh.lookAt(globe.position); });
 
-                // Animate asteroids
                 for (let i = 0; i < asteroidCount; i++) {
                     asteroidMesh.getMatrixAt(i, dummy.matrix);
                     dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
                     dummy.position.add(asteroidData[i].velocity);
-                    dummy.rotation.x += asteroidData[i].rotationSpeed.x;
-                    dummy.rotation.y += asteroidData[i].rotationSpeed.y;
-                    
-                    // Prevent asteroids from hitting the globe or going too far
                     const distanceFromCenter = dummy.position.length();
                     if (distanceFromCenter > 50 || distanceFromCenter < 2.5) {
-                        dummy.position.set((Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80);
+                         dummy.position.set((Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80);
                     }
                     dummy.updateMatrix();
                     asteroidMesh.setMatrixAt(i, dummy.matrix);
                 }
                 asteroidMesh.instanceMatrix.needsUpdate = true;
                 
-                // Scroll-to-zoom feature
-                camera.position.z = 5 - scrollY * 0.002;
-
-                // Globe parallax effect
+                const maxScroll = window.innerHeight * 1.5; 
+                const zoomScroll = Math.min(scrollY, maxScroll);
+                const mainContentVisible = document.getElementById('articles-page').classList.contains('hidden');
+                if (mainContentVisible) {
+                    camera.position.z = 5 - zoomScroll * 0.002;
+                }
+                
                 const parallaxX = mouse.x * 0.3;
                 const parallaxY = mouse.y * 0.3;
                 globeGroup.rotation.y += 0.05 * (parallaxX - globeGroup.rotation.y);
                 globeGroup.rotation.x += 0.05 * (-parallaxY - globeGroup.rotation.x);
-
-                // Update globe pulse
-                if(isPulsing) {
-                    pulseTime += deltaTime;
-                    const scale = 1 + 0.1 * Math.sin(pulseTime * 10) * Math.exp(-pulseTime*2);
-                    globeGroup.scale.set(scale, scale, scale);
-                    if(pulseTime > 2) {
-                        isPulsing = false;
-                        globeGroup.scale.set(1,1,1);
-                    }
-                }
                 
                 renderer.render(scene, camera);
             };
-
             animate();
             
-            // --- Window Resize Handler ---
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(window.devicePixelRatio);
             });
+        }
+
+        // --- UI Animations & Interactions ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContainer = document.querySelector('.content-container');
+            const articlesPage = document.querySelector('#articles-page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const logoLink = document.querySelector('.logo-link');
+            const backToMainBtn = document.querySelector('#back-to-main');
             
-            // --- UI Animations ---
+            function showMainPage(scrollToId) {
+                articlesPage.classList.add('opacity-0', '-translate-y-full');
+                setTimeout(() => articlesPage.classList.add('hidden'), 500);
+                
+                mainContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    mainContainer.classList.remove('opacity-0');
+                    if (scrollToId && document.getElementById(scrollToId)) {
+                        document.getElementById(scrollToId).scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }, 10);
+                window.addEventListener('scroll', handleScroll);
+            }
+
+            function showArticlesPage() {
+                mainContainer.classList.add('opacity-0');
+                setTimeout(() => mainContainer.classList.add('hidden'), 500);
+                
+                articlesPage.classList.remove('hidden');
+                setTimeout(() => {
+                    articlesPage.classList.remove('opacity-0', '-translate-y-full');
+                }, 10);
+                window.removeEventListener('scroll', handleScroll);
+            }
             
+            let scrollY = window.scrollY;
+            const handleScroll = () => { scrollY = window.scrollY; };
+            window.addEventListener('scroll', handleScroll);
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const href = link.getAttribute('href');
+                    if (href === '#articles') {
+                        showArticlesPage();
+                    } else {
+                        showMainPage(href.substring(1));
+                    }
+                });
+            });
+
+            logoLink.addEventListener('click', (e) => { e.preventDefault(); showMainPage('home'); });
+            backToMainBtn.addEventListener('click', (e) => { e.preventDefault(); showMainPage('home'); });
+
             // Card Tilt Effect
             const cards = document.querySelectorAll('.card');
             cards.forEach(card => {
                 card.addEventListener('mousemove', (e) => {
                     const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2; const centerY = rect.height / 2;
                     const rotateX = ((y - centerY) / centerY) * -8;
                     const rotateY = ((x - centerX) / centerX) * 8;
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
                 });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-                });
+                card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'; });
             });
 
-            // Scroll-based Fade-in Animation
+            // Intersection Observer for scroll animations
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
+                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
             }, { threshold: 0.2 });
             document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
             
-            // Hero Text Letter Animation
+            // Hero Text Animation
             const title = "Shaping a Sustainable Future";
             const titleContainer = document.querySelector('.hero-title');
-            titleContainer.innerHTML = ''; // Clear the placeholder
+            titleContainer.innerHTML = '';
             title.split('').forEach((letter, i) => {
                 const span = document.createElement('span');
                 span.textContent = letter === ' ' ? '\u00A0' : letter;
                 span.style.animationDelay = `${i * 0.05}s`;
                 titleContainer.appendChild(span);
             });
-        }
+
+            // Article Modal Logic
+            const articleModal = document.getElementById('article-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalText = document.getElementById('modal-text');
+            const articleCards = document.querySelectorAll('.article-card');
+
+            function openModal(card) {
+                const imgSrc = card.querySelector('img').src;
+                const title = card.querySelector('h3').textContent;
+                const text = card.querySelector('p.hidden').textContent; // Get full text
+
+                modalImage.src = imgSrc;
+                modalTitle.textContent = title;
+                modalText.innerHTML = `<p>${text.replace(/\n/g, '</p><p>')}</p>`;
+                
+                articleModal.classList.remove('hidden');
+                setTimeout(() => {
+                    articleModal.classList.remove('opacity-0');
+                    modalContent.classList.remove('scale-95');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalContent.classList.add('scale-95');
+                articleModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    articleModal.classList.add('hidden');
+                }, 300);
+            }
+
+            articleCards.forEach(card => card.addEventListener('click', () => openModal(card)));
+            modalCloseBtn.addEventListener('click', closeModal);
+            articleModal.addEventListener('click', (e) => {
+                if (e.target === articleModal) {
+                    closeModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>
-
 
